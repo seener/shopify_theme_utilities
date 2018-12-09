@@ -40,15 +40,14 @@ import re
 import numpy as np
 
 # get file path from user.
-FILE_LOC = input("Provide path to theme folder:")
+FILE_DATA = input("Provide full path to theme config data file:")
 BAK = input("Would you like to create a backup [Y/N]:")
 if BAK.upper() != "Y":
     print("Are you sure you don't want a backup?")
     BAK = input("Say yes to backups [Y/N]:")
 
 # it is assumed that \config\settings_data.json exists
-FILE_DATA = FILE_LOC + "\\config\\settings_data.json"
-FILE_SCHEMA = FILE_LOC + "\\config\\settings_schema.json"
+FILE_SCHEMA = FILE_DATA.replace('_data', '_schema')
 
 # import json files and save as a dictoinary
 with open(FILE_DATA, "r") as file:
@@ -58,7 +57,7 @@ with open(FILE_SCHEMA, "r") as file:
 
 # create a backup of the settings_data.json
 if BAK.upper() == 'Y':
-    FILE_BAK = FILE_LOC + "\\config\\settings_data_bak.json"
+    FILE_BAK = FILE_DATA.replace('_data', '_data_bak')
     with open(FILE_BAK, "w") as file:
         file.truncate()
         json.dump(SETTINGS_DATA, file)
@@ -75,11 +74,16 @@ print("------------------------------------------------------------------")
 # get the list of keys for presets
 KEY_NAMES = list(SETTINGS_DATA["presets"].keys())
 
+# dictionary for unmatched by preset
+UNMATCHED_OUT = {}
+
 # loop through each key name and match against general_ids list
 for name in KEY_NAMES:
     # get the unmatched keys between the schema and data settings
     IDS = np.unique(np.array(list(SETTINGS_DATA["presets"][name].keys()))[:-2])
     NOT_MATCHED = list(set(IDS) - set(GENERAL_IDS))
+    NOT_MATCHED.sort()
+    UNMATCHED_OUT.update({name: NOT_MATCHED})
 
     # loop through non-matched ids and remove from dictionary
     for kill in NOT_MATCHED:
@@ -98,3 +102,5 @@ for name in KEY_NAMES:
 with open(FILE_DATA, "w") as file:
     file.truncate()
     json.dump(SETTINGS_DATA, file)
+
+print("------------------------------------------------------------------")
