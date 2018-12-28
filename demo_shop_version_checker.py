@@ -17,8 +17,8 @@ def get_page(url):
 
     Dependency
     ----------
-    requests
-    BeautifulSoup
+    get from requests
+    BeautifulSoup from bs4
 
     Parameters
     ----------
@@ -40,11 +40,11 @@ def get_page(url):
 
 def get_style_sheet(html_head):
     """
-    Returns the style sheet comment string from the head of the hmtl
+    Returns the style sheet comment string from the head of the html
 
     Dependency
     ----------
-    Comment
+    Comment from bs4
 
     Parameters
     ----------
@@ -54,7 +54,7 @@ def get_style_sheet(html_head):
     -------
     result: string with the stylesheet information
     """
-    for comments in html_head.findAll(text=lambda text: isinstance(text, Comment)):
+    for comments in html_head.find_all(text=lambda text: isinstance(text, Comment)):
         if "stylesheets for" in str.lower(comments.extract()):
             return comments.extract().strip()
 
@@ -65,5 +65,5 @@ with open(FILE, 'r') as f:
 
 for url in URLS:
     HEAD = get_page(url).head  # get just he head of the page
-    STYLE = get_style_sheet(HEAD)  # get the style shee used
+    STYLE = get_style_sheet(HEAD)  # get the style sheet used
     print(url + ": " + STYLE)
