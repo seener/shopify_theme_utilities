@@ -67,6 +67,6 @@ with open(FILE, 'r') as f:
     URLS = f.read().split("\n")
 
 for link in URLS:
-    HEAD = get_page(link).head  # get just he head of the page
+    HEAD = get_page(link).head  # get just the head of the page
     STYLE = get_style_sheet(HEAD)  # get the style sheet used
     print(link + ": " + STYLE)
