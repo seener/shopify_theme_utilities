@@ -60,7 +60,7 @@ if BAK.upper() == 'Y':
     FILE_BAK = FILE_DATA.replace('_data', '_data_bak')
     with open(FILE_BAK, "w") as file:
         file.truncate()
-        json.dump(SETTINGS_DATA, file)
+        json.dump(SETTINGS_DATA, file, indent=2)
 
 # the list of ids from schema
 MATCH_PATTERN = r'"id": ".*"'
@@ -101,6 +101,6 @@ for name in KEY_NAMES:
 # write output
 with open(FILE_DATA, "w") as file:
     file.truncate()
-    json.dump(SETTINGS_DATA, file)
+    json.dump(SETTINGS_DATA, file, indent=2)
 
 print("------------------------------------------------------------------")
